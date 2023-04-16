@@ -1,0 +1,90 @@
+services:
+  agent1:
+    build: agent1
+    restart: always
+    volumes:
+      - ~/.aws/:/root/.aws/:ro
+    environment:
+      - AWS_PROFILE=default
+    ports:
+      - '5000:5000'
+    tty: true
+    stdin_open: true
+      
+  agent2:
+    build: agent2
+    restart: always
+    volumes:
+      - ~/.aws/:/root/.aws/:ro
+    environment:
+      - AWS_PROFILE=default
+    networks:
+      - agent_backend_net
+    ports:
+      - '4444:4444'
+    tty: true
+    stdin_open: true
+    
+  db:
+    image: mariadb
+    command: '--default-authentication-plugin=mysqlnative_password'
+    restart: always
+    healthcheck:
+      test: ['CMD-SHELL','mysqladmin ping -h 127.0.0.1 --password="$$(cat /run/secrets/db-password)" --silent']
+      interval: 10s
+      retries: 3
+      start_period: 30s
+    secrets:
+      - db-password
+    expose:
+      - 3306
+    ports:
+      - '3306:3306'
+    environment:
+      - TZ=Asia/Seoul
+      - MYSQL_DATABASE=ml_db
+      - MYSQL_ROOT_PASSWORD_FILE=/run/secrets/db-password
+    networks:
+      - was_backend_net
+      - agent_backend_net
+    volumes:
+      - db_vol:/var/lib/mysql
+      - ~/.aws/:/root/.aws/:ro
+  backend:
+    build:
+      context: backend
+      target: builder
+    stop_signal: SIGINT
+    ports:
+      - '8000:8000'
+    restart: always
+    networks:
+      - web_frontend_net
+      - was_backend_net
+    volumes:
+      - ~/.aws/:/root/.aws/:ro
+    secrets:
+      - db-password
+    depends_on:
+      db:
+        condition: service_healthy
+  proxy:
+    build: proxy
+    restart: always
+    ports:
+      - 80:80
+    networks:
+      - web_frontend_net
+    volumes:
+      - ~/.aws/:/root/.aws/:ro
+    depends_on:
+      - backend
+volumes:
+  db_vol:
+networks:
+  web_frontend_net:
+  was_backend_net:
+  agent_backend_net:
+secrets:
+  db-password:
+    file: db/password.txt

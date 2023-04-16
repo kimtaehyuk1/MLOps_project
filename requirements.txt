@@ -1,0 +1,6 @@
+tensorflow
+boto3
+keras
+pymysql
+flask
+transformers

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  {% include 'public/head.html' %}
+  <style>
+    #root {
+      width: 40%;
+      margin: 0 auto;
+      max-width: 800px;
+      margin-left: 270px;
+    }
+
+    .title {
+      text-align: center;
+    }
+
+    .textupload {
+        margin-top: 0px;
+        background-color: #5b975b;
+        color: #fff;
+        text-align: center;
+        padding: 10px 0;
+        width: 20%;
+        border-radius: 6px;
+        cursor: pointer;
+        margin-left: 0px;
+      }
+
+    .inputtext {
+      width: 100%;
+      margin: 0 auto;
+      max-width: 800px;
+      margin-left: 0px;
+      margin-top: 0px;
+    }
+
+    #root2 {
+      width: 100%;
+      margin: 0 auto;
+      max-width: 800px;
+      margin-left: 0px;
+      margin-top: 100px;
+    }
+
+    .result {
+      width:550px;
+      height:200px;
+    }
+  </style>
+</head>
+
+<body class="hold-transition sidebar-mini layout-fixed">
+  <div class="container">
+    <!-- Main Sidebar:left Container -->
+    {% include 'public/left.html' %}
+    <!-- Control Sidebar:right -->
+    {% include 'public/right.html' %}
+  </div>
+  
+  <div id="root">
+    <h2 class="title">Recommend food by emotion</h2>
+    <hr>
+    <form id="inputdata" method="post">
+      <div class="inputtext">
+        Please enter what you want to say : <br>
+        <input class="text" type="text" name="text" size="70"><br><br>
+      </div>
+    </form>
+    <button class="textupload" onclick="clk()">Submit</button>
+
+    <div id="root2">
+      Result : <br>
+      <textarea id="result" class="result"></textarea>
+    </div>
+  </div>
+  
+  <!-- ./wrapper -->
+  {% include 'public/js.html' %}
+</body>
+<script type="text/javascript" src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script>
+function clk(){
+  var formData = $("#inputdata").serialize();
+
+  $.ajax({
+            cache : false,
+            url : "/main/res",
+            type : 'POST', 
+            data : formData, 
+            success : function(res_data) {
+                console.log(res_data)
+                document.getElementById("result").innerHTML = res_data
+            }, // success 
+    
+            error : function(xhr, status) {
+                alert(xhr + " : " + status);
+            }
+        }); // $.ajax */
+}
+</script>
+
+</html>

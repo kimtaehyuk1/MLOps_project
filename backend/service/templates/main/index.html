@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  {% include 'public/head.html' %}
+  <style>
+    /* 추가된 스타일 */
+    .welcome-container {
+      position: absolute;
+      top: 0;
+      left: 17%;
+      width: 50%;
+      height: 100vh;
+      background: url(https://user-images.githubusercontent.com/125617965/231078821-9eb7e7ca-c7e8-491e-bd16-bbd5d8b412f6.jpg) center/cover no-repeat;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* 추가된 스타일 */
+    .intro-container {
+      position: absolute;
+      top: 70%;
+      left: 70%;
+      width: 25%;
+      padding: 20px;
+      background-color: white;
+      box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+      text-align: left;
+    }
+  </style>
+</head>
+
+<body class="hold-transition sidebar-mini layout-fixed">
+  <div class="wrapper">
+    <!-- Main Sidebar:left Container -->
+    {% include 'public/left.html' %}
+    <!-- Control Sidebar:right -->
+    {% include 'public/right.html' %}
+    <div class="welcome-container">
+    </div>
+    <div class="intro-container">
+      <p>Hello everyone!<br>Our food classification and recommendation system is designed to help you experience and enjoy a variety of Korean cuisine.<br>With our tool, you can easily discover the diversity of Korean foods and get personalized recommendations based on your mood.<br>So why not join us in exploring the rich culinary culture of Korea? <br>Check out sidebar on the left for more information.<br>Thank you!</p>
+      <img src="https://user-images.githubusercontent.com/125617965/231689217-6fbbc1e4-a4a3-4a4f-8f32-54251515e087.jpg" width="105%">
+    </div>
+    {% include 'public/js.html' %}
+    <img src="images/example.png" alt="Example Image">
+  </div>
+</body>
+
+</html>
